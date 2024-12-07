@@ -1,0 +1,63 @@
+-- Menggunakan Library dari Wizard (GUI)
+Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+
+-- Membuat Window untuk GUI
+local PhantomForcesWindow = Library:NewWindow("Game Hub - VinnOvO")
+
+-- Section pertama untuk tombol-tombol
+local MainSection = PhantomForcesWindow:NewSection("Main Features")
+
+-- Tambahkan Tombol "Start Gym"
+MainSection:CreateButton("Start Gym", function()
+    local gymEvent = game:GetService("ReplicatedStorage").Events.Gym.GymClick
+    local loopActive = true
+    spawn(function()
+        while loopActive do
+            gymEvent:FireServer()
+            wait(1)  -- Adjust time sesuai kebutuhan
+        end
+    end)
+    Notify("Gym Loop Started", 3)
+end)
+
+-- Tombol untuk Stop Gym Loop
+MainSection:CreateButton("Stop Gym", function()
+    loopActive = false
+    Notify("Gym Loop Stopped", 3)
+end)
+
+-- Tombol Rebirth untuk memulai proses rebirth
+MainSection:CreateButton("Rebirth", function()
+    local rebirthEvent = game:GetService("ReplicatedStorage").Functions.Rebirth.Rebirth
+    rebirthEvent:InvokeServer()
+    Notify("Rebirth Triggered", 3)
+end)
+
+-- Section kedua untuk kontrol Gym Auto Loop
+local GymLoopSection = PhantomForcesWindow:NewSection("Gym Auto Loop")
+
+-- Toggle untuk mengaktifkan dan menonaktifkan Auto Gym Loop
+GymLoopSection:CreateToggle("Auto Gym Loop", function(value)
+    local loopActive = value
+    if loopActive then
+        spawn(function()
+            while loopActive do
+                local gymEvent = game:GetService("ReplicatedStorage").Events.Gym.GymClick
+                gymEvent:FireServer()
+                wait(1)  -- Adjust waktu interval sesuai keinginan
+            end
+        end)
+        Notify("Gym Auto Loop is On", 3)
+    else
+        Notify("Gym Auto Loop is Off", 3)
+    end
+end)
+
+-- Fungsi untuk Notifikasi
+function Notify(message, time)
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Notification",
+        Text = message,
+        Duration = time
+    })
+end
