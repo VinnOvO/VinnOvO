@@ -1,0 +1,55 @@
+-- Menggunakan Library dari Wizard (GUI)
+Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+
+-- Membuat Window untuk GUI
+local PhantomForcesWindow = Library:NewWindow("Back Training By VinnOvO")
+
+-- Section untuk tombol Gym dan Rebirth
+local MainSection = PhantomForcesWindow:NewSection("Main Features")
+
+-- Variabel untuk status loop
+local gymLoopActive = false
+local rebirthLoopActive = false
+
+-- Tombol untuk Start/Stop Gym Loop
+MainSection:CreateButton("Start Gym Loop", function()
+    gymLoopActive = not gymLoopActive
+    if gymLoopActive then
+        spawn(function()
+            while gymLoopActive do
+                -- Memanggil event GymClick (Sesuaikan dengan event asli di game Anda)
+                game:GetService("ReplicatedStorage").Events.Gym.GymClick:FireServer()
+                wait(1)  -- Sesuaikan waktu delay sesuai kebutuhan
+            end
+        end)
+        Notify("Gym Loop Started", 3)
+    else
+        Notify("Gym Loop Stopped", 3)
+    end
+end)
+
+-- Tombol untuk Start/Stop Rebirth Loop
+MainSection:CreateButton("Start Rebirth Loop", function()
+    rebirthLoopActive = not rebirthLoopActive
+    if rebirthLoopActive then
+        spawn(function()
+            while rebirthLoopActive do
+                -- Memanggil fungsi Rebirth (Sesuaikan dengan fungsi asli di game Anda)
+                game:GetService("ReplicatedStorage").Functions.Rebirth.Rebirth:InvokeServer()
+                wait(1)  -- Sesuaikan waktu delay sesuai kebutuhan
+            end
+        end)
+        Notify("Rebirth Loop Started", 3)
+    else
+        Notify("Rebirth Loop Stopped", 3)
+    end
+end)
+
+-- Fungsi untuk menampilkan notifikasi
+function Notify(message, time)
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Notification",
+        Text = message,
+        Duration = time
+    })
+end
