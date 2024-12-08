@@ -1,4 +1,4 @@
---[[ All Hubs/Script Are Come From Trustful Sources And If Some Code Aren't Working Please DM VinnOvO In discord and report It Lr U Can request What to Add ]]--
+--[[ All Hubs/Script Are Come From Trustful Sources And If Some Code Aren't Working Please DM ikura0 In discord and report It Lr U Can request What to Add ]]--
 
 
 --[[ Notification]]--
@@ -181,6 +181,36 @@ webImport("ui/main") ;
   else
     Notify("Hydroxide Loaded", 3)
   end ;
+end) ;
+
+WeLoveCat:CreateButton("Anti-Lag", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/VinnOvO/VinnOvO/refs/heads/main/Anti%20Lag"))()
+if V10 then
+  Sound(6150774030, 0.1)
+  task.wait(.1)
+  Notify("Anti-Lag Loaded", 0)
+else
+  Notify("Anti-Lag Loaded", 0)
+end ;
+end) ;
+
+WeLoveCat:CreateButton("Server-Hoop", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/VinnOvO/VinnOvO/refs/heads/main/Server%20Hoop"))()
+if V10 then
+  Sound(6150774030, 0.1)
+  task.wait(.1)
+  Notify("ServerHoop Loaded", 0)
+else
+  Notify("Server-Hoop Loaded", 0)
+end ;
+end) ;
+
+WeLoveCat:CreateButton("Server-Small", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/VinnOvO/VinnOvO/refs/heads/main/Small%20Server"))()
+if V10 then
+  Sound(6150774030, 0.1)
+  task.wait(.1)
+  Notify("ServerSmall Loaded", 0)
+else
+  Notify("ServerSmall Loaded", 0)
+   end ;
 end) ;
 
 --[[ 2nd Section UGC Script ]]--
