@@ -1,0 +1,14 @@
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local player = Players.LocalPlayer
+local placeId = game.PlaceId
+
+local function serverHop()
+    player:Kick(" ServerHoop By Vinn ")
+
+    wait(0.5)
+
+    TeleportService:Teleport(placeId, player)
+end
+
+serverHop()
