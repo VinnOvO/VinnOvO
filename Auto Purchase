@@ -1,0 +1,83 @@
+-- GUI Library
+local GameName = "Auto Purchase"
+local tab1name = "Main"
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+
+-- Membuat Window Baru
+local GameWindow = Library:NewWindow(GameName)
+
+-- Membuat Tab/Section Baru
+local Tab1 = GameWindow:NewSection(tab1name)
+local Tab2 = GameWindow:NewSection("Script By VinnOvO")
+
+-- Variabel Toggle
+_G.autoPurchaseEnabled = false
+
+-- Fungsi autoPurchaseUGCItem
+local function autoPurchaseUGCItem()
+    getrenv()._set = clonefunction(setthreadidentity)
+    local old
+    old = hookmetamethod(game, "__index", function(a, b)
+        task.spawn(function()
+            _set(7)
+            task.wait()
+            getgenv().promptpurchaserequestedv2 = MarketplaceService.PromptPurchaseRequestedV2:Connect(function(...)
+                createNotification("Prompt Detected: Attempting to purchase the UGC item...")
+                local startTime = tick()
+                local t = {...}
+                local assetId = t[2]
+                local idempotencyKey = t[5]
+                local purchaseAuthToken = t[6]
+                local info = MarketplaceService:GetProductInfo(assetId)
+                local productId = info.ProductId
+                local price = info.PriceInRobux
+                local collectibleItemId = info.CollectibleItemId
+                local collectibleProductId = info.CollectibleProductId
+
+                createNotification("PurchaseAuthToken: " .. purchaseAuthToken)
+                createNotification("IdempotencyKey: " .. idempotencyKey)
+                createNotification("CollectibleItemId: " .. collectibleItemId)
+                createNotification("CollectibleProductId: " .. collectibleProductId)
+                createNotification("ProductId (should be 0): " .. productId)
+                createNotification("Price: " .. price)
+                playNotificationSound()
+                local success, result = pcall(function()
+                    return MarketplaceService:PerformPurchase(Enum.InfoType.Asset, productId, price,
+                        tostring(game:GetService("HttpService"):GenerateGUID(false)), true, collectibleItemId,
+                        collectibleProductId, idempotencyKey, tostring(purchaseAuthToken))
+                end)
+
+                if success then
+                    createNotification("First Purchase Attempt")
+                    for i, v in pairs(result) do
+                        createNotification(i .. ": " .. v)
+                    end
+                    local endTime = tick()
+                    local duration = endTime - startTime
+                    createNotification("Bought Item! Took " .. tostring(duration) .. " seconds")
+                else
+                    createNotification("Failed to Purchase Item: " .. result)
+                end
+            end)
+        end)
+        hookmetamethod(game, "__index", old)
+        return old(a, b)
+    end)
+end
+
+-- Toggle Auto Purchase
+Tab1:CreateToggle("Enable Auto Purchase", function(value)
+    _G.autoPurchaseEnabled = value
+    if _G.autoPurchaseEnabled then
+        createNotification("Auto Purchase Enabled")
+        autoPurchaseUGCItem()
+    else
+        createNotification("Auto Purchase Disabled")
+    end
+end)
+
+-- Informasi Kredit
+Tab2:CreateButton("Credits", function()
+    createNotification("Script by VinnOvO")
+end)
